@@ -1,0 +1,891 @@
+{
+    "pipes": [
+        {
+            "name": "EchoPipe",
+            "id": "pipe-EchoPipe-cdc2ee1ca5e35c9a9d69a4120ca8cdf9",
+            "file": "projects/handy-angular/src/lib/pipes/echo.pipe.ts",
+            "type": "pipe",
+            "description": "",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "transform",
+                    "args": [
+                        {
+                            "name": "value",
+                            "type": "any"
+                        },
+                        {
+                            "name": "args",
+                            "type": "any",
+                            "optional": true
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 8,
+                    "jsdoctags": [
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "args",
+                            "type": "any",
+                            "optional": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "ngname": "echo",
+            "sourceCode": "import { Pipe, PipeTransform } from '@angular/core';\n\n@Pipe({\n  name: 'echo'\n})\nexport class EchoPipe implements PipeTransform {\n  /* istanbul ignore next */\n  transform(value: any, args?: any): any {\n    console.log('[EchoPipe]', value);\n    return value;\n  }\n}\n"
+        },
+        {
+            "name": "PrettyPrintPipe",
+            "id": "pipe-PrettyPrintPipe-a6210485f9edb9579585e34e482c8138",
+            "file": "projects/handy-angular/src/lib/pipes/pretty-print.pipe.ts",
+            "type": "pipe",
+            "description": "",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "transform",
+                    "args": [
+                        {
+                            "name": "val",
+                            "type": "any"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 20,
+                    "jsdoctags": [
+                        {
+                            "name": "val",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "ngname": "prettyprint",
+            "sourceCode": "import { Pipe, PipeTransform } from '@angular/core';\n\nconst getCircularReplacer = () => {\n  const seen = new WeakSet();\n  return (key: string, value: any) => {\n    if (typeof value === 'object' && value !== null) {\n      if (seen.has(value)) {\n        return;\n      }\n      seen.add(value);\n    }\n    return value;\n  };\n};\n\n@Pipe({\n  name: 'prettyprint'\n})\nexport class PrettyPrintPipe implements PipeTransform {\n  transform(val: any) {\n    if (typeof (val) === 'undefined' || typeof (val) === null) {\n      return ''; // check value before process it.\n    }\n    return JSON.stringify(val, getCircularReplacer(), ' ')\n      .replace(' ', '&nbsp;')\n      .replace('\\n', '<br/>')\n      .replace(/\\\"([^(\\\")\"]+)\\\":/g, '$1:');\n  }\n}\n"
+        },
+        {
+            "name": "SafePipe",
+            "id": "pipe-SafePipe-882f171f2998e1351428141707e35fc6",
+            "file": "projects/handy-angular/src/lib/pipes/safe.pipe.ts",
+            "type": "pipe",
+            "description": "",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "transform",
+                    "args": [
+                        {
+                            "name": "url",
+                            "type": "string"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 7,
+                    "jsdoctags": [
+                        {
+                            "name": "url",
+                            "type": "string",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "ngname": "safe",
+            "sourceCode": "import { Pipe, PipeTransform } from '@angular/core';\nimport { DomSanitizer } from '@angular/platform-browser';\n\n@Pipe({ name: 'safe' })\nexport class SafePipe implements PipeTransform {\n  constructor(private sanitizer: DomSanitizer) { }\n  transform(url: string) {\n    return this.sanitizer.bypassSecurityTrustResourceUrl(url);\n  }\n}\n"
+        }
+    ],
+    "interfaces": [],
+    "injectables": [
+        {
+            "name": "StateService",
+            "id": "injectable-StateService-7c79e8e33f0a69d75208c36bbd068003",
+            "file": "projects/handy-angular/src/lib/utilities/state-service.base.ts",
+            "properties": [
+                {
+                    "name": "state",
+                    "defaultValue": "new Subject<T>()",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 6,
+                    "modifierKind": [
+                        112
+                    ]
+                },
+                {
+                    "name": "state$",
+                    "type": "Observable<T>",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                }
+            ],
+            "methods": [],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\nimport { Observable, Subject } from 'rxjs';\n\n@Injectable()\nexport abstract class StateService<T> {\n  private state = new Subject<T>();\n  state$: Observable<T>;\n\n  constructor() {\n    this.state$ = this.state.asObservable();\n  }\n}\n\nexport function emitPropertyChange(property: string) {\n  return function (this: any) {\n    this.state.next({ [property]: this[property] });\n  };\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 7
+            },
+            "type": "injectable"
+        }
+    ],
+    "classes": [
+        {
+            "name": "TrackBy",
+            "id": "class-TrackBy-73425d079f383add96eb34cb517e4b1b",
+            "file": "projects/handy-angular/src/lib/utilities/track-by.ts",
+            "type": "class",
+            "sourceCode": "export class TrackBy<T> {\n  static readonly protectedProperties = ['key', 'id', 'index', 'customProperty'];\n  [key: string]: Function | string;\n\n  private key: string;\n  constructor(key = 'id') {\n    this.key = key;\n    if (!TrackBy.protectedProperties.includes(key)) {\n      this[key] = this.customProperty;\n    }\n  }\n  id(index: number, item: any): string {\n    return item.id;\n  }\n\n  index(index: number): number {\n    return index;\n  }\n\n  customProperty(index: number, item: T & {[index: string]:any}): string {\n    return item[this.key];\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "key",
+                        "type": "string",
+                        "defaultValue": "'id'"
+                    }
+                ],
+                "line": 22,
+                "jsdoctags": [
+                    {
+                        "name": "key",
+                        "type": "string",
+                        "defaultValue": "'id'",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "properties": [
+                {
+                    "name": "key",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 22,
+                    "modifierKind": [
+                        112
+                    ]
+                },
+                {
+                    "name": "protectedProperties",
+                    "defaultValue": "['key', 'id', 'index', 'customProperty']",
+                    "type": "[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 19,
+                    "modifierKind": [
+                        115,
+                        132
+                    ]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "customProperty",
+                    "args": [
+                        {
+                            "name": "index",
+                            "type": "number"
+                        },
+                        {
+                            "name": "item",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "string",
+                    "typeParameters": [],
+                    "line": 37,
+                    "jsdoctags": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "item",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "id",
+                    "args": [
+                        {
+                            "name": "index",
+                            "type": "number"
+                        },
+                        {
+                            "name": "item",
+                            "type": "any"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "string",
+                    "typeParameters": [],
+                    "line": 29,
+                    "jsdoctags": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "item",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "index",
+                    "args": [
+                        {
+                            "name": "index",
+                            "type": "number"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "number",
+                    "typeParameters": [],
+                    "line": 33,
+                    "jsdoctags": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "indexSignatures": [
+                {
+                    "id": "index-declaration-73425d079f383add96eb34cb517e4b1b",
+                    "args": [
+                        {
+                            "name": "key",
+                            "type": "string"
+                        }
+                    ],
+                    "returnType": "Function | string",
+                    "line": 19
+                }
+            ],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        }
+    ],
+    "directives": [
+        {
+            "name": "ClickOutsideDirective",
+            "id": "directive-ClickOutsideDirective-42f7dff1a06f387c2a989f37d8af388f",
+            "file": "projects/handy-angular/src/lib/directives/click-outside.directive.ts",
+            "type": "directive",
+            "description": "",
+            "sourceCode": "import {\n  Directive, Output, ElementRef,\n  EventEmitter, HostListener\n} from '@angular/core';\n\n@Directive({\n  selector: '[appClickOutside]'\n})\n\nexport class ClickOutsideDirective {\n  constructor(private _elementRef: ElementRef) { }\n\n  @Output() appClickOutside: EventEmitter<any> = new EventEmitter();\n\n  @HostListener('document:click', ['$event.target']) onClick(targetElement: ElementRef) {\n    const isClickedInside = this._elementRef.nativeElement.contains(targetElement);\n    if (!isClickedInside) {\n      this.appClickOutside.emit(null);\n    }\n\n  }\n}\n",
+            "selector": "[appClickOutside]",
+            "providers": [],
+            "inputsClass": [],
+            "outputsClass": [
+                {
+                    "name": "appClickOutside",
+                    "defaultValue": "new EventEmitter()",
+                    "line": 13,
+                    "type": "EventEmitter<any>"
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [
+                {
+                    "name": "document:click",
+                    "args": [
+                        {
+                            "name": "targetElement",
+                            "type": "ElementRef"
+                        }
+                    ],
+                    "argsDecorator": [
+                        "$event.target"
+                    ],
+                    "line": 15
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "_elementRef",
+                        "type": "ElementRef"
+                    }
+                ],
+                "line": 10,
+                "jsdoctags": [
+                    {
+                        "name": "_elementRef",
+                        "type": "ElementRef",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "components": [
+        {
+            "name": "MockSafeComponent",
+            "id": "component-MockSafeComponent-4ba42064e64837ababe444280a14facb",
+            "file": "projects/handy-angular/src/lib/pipes/stories/safe.component.mock.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "storybook-safe-pipe",
+            "styleUrls": [],
+            "styles": [],
+            "template": "<div>    <header>pipe</header>\n    <ul>\n      <li>\n        <span class=\"without-pipe\">Without pipe: <a [href]=\"url\">link</a></span>\n      </li>\n      <li>\n        <span class=\"with-pipe\">With pipe: <a [href]=\"url | safe\">link</a></span>\n      </li>\n    </ul>\n  </div>\n\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "url",
+                    "defaultValue": "\"https://www.google.com\"",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                }
+            ],
+            "methodsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component } from \"@angular/core\";\n\n@Component({\n  selector: 'storybook-safe-pipe',\n  template: `<div>\n    <header>pipe</header>\n    <ul>\n      <li>\n        <span class=\"without-pipe\">Without pipe: <a [href]=\"url\">link</a></span>\n      </li>\n      <li>\n        <span class=\"with-pipe\">With pipe: <a [href]=\"url | safe\">link</a></span>\n      </li>\n    </ul>\n  </div>\n\n`\n})\nexport class MockSafeComponent {\n  url=\"https://www.google.com\"\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": ""
+        }
+    ],
+    "modules": [],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "Base",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/handy-angular/src/lib/pipes/stories/safe.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "configureTests",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "test-config.helper.ts",
+                "type": "",
+                "defaultValue": "(configure: ConfigureFn, compilerOptions: CompilerOptions = {}) => {\n  const compilerConfig: CompilerOptions = {\n    preserveWhitespaces: false,\n    ...compilerOptions,\n  };\n\n  const configuredTestBed = TestBed.configureCompiler(compilerConfig);\n\n  configure(configuredTestBed);\n\n  return configuredTestBed.compileComponents().then(() => configuredTestBed);\n}"
+            },
+            {
+                "name": "getCircularReplacer",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/handy-angular/src/lib/pipes/pretty-print.pipe.ts",
+                "type": "",
+                "defaultValue": "() => {\n  const seen = new WeakSet();\n  return (key: string, value: any) => {\n    if (typeof value === 'object' && value !== null) {\n      if (seen.has(value)) {\n        return;\n      }\n      seen.add(value);\n    }\n    return value;\n  };\n}"
+            },
+            {
+                "name": "mock",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "setup-jest.ts",
+                "type": "",
+                "defaultValue": "() => {\n  let storage: { [key: string]: string } = {};\n  return {\n    getItem: (key: string) => (key in storage ? storage[key] : null),\n    setItem: (key: string, value: string) => (storage[key] = value || ''),\n    removeItem: (key: string) => delete storage[key],\n    clear: () => (storage = {}),\n  };\n}"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/handy-angular/src/lib/pipes/stories/safe.stories.ts",
+                "type": "Story<MockSafeComponent>",
+                "defaultValue": "() => ({\n  component: MockSafeComponent,\n  template: `<app-link></app-link>`,\n})"
+            }
+        ],
+        "functions": [
+            {
+                "name": "ChangeDetecting",
+                "file": "projects/handy-angular/src/lib/decorators/change-detecting.decorator.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "<p>accessor decorator to conditionally trigger change detection on change (for\nuse with getters that are in the template)</p>\n",
+                "args": [
+                    {
+                        "type": "object"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "type": "object",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "emitPropertyChange",
+                "file": "projects/handy-angular/src/lib/utilities/state-service.base.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "property"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "property",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "factorySafeHTMLElement",
+                "file": "projects/handy-angular/src/lib/utilities/factory-safe-native-element.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "el",
+                        "optional": true
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "el",
+                        "optional": true,
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "factorySafeNativeElement",
+                "file": "projects/handy-angular/src/lib/utilities/factory-safe-native-element.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "elRef",
+                        "optional": true
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "elRef",
+                        "optional": true,
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            }
+        ],
+        "typealiases": [
+            {
+                "name": "CompilerOptions",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "Partial<literal type>",
+                "file": "test-config.helper.ts",
+                "description": "",
+                "kind": 161
+            },
+            {
+                "name": "ConfigureFn",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "function",
+                "file": "test-config.helper.ts",
+                "description": "",
+                "kind": 162
+            }
+        ],
+        "enumerations": [],
+        "groupedVariables": {
+            "projects/handy-angular/src/lib/pipes/stories/safe.stories.ts": [
+                {
+                    "name": "Base",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/handy-angular/src/lib/pipes/stories/safe.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/handy-angular/src/lib/pipes/stories/safe.stories.ts",
+                    "type": "Story<MockSafeComponent>",
+                    "defaultValue": "() => ({\n  component: MockSafeComponent,\n  template: `<app-link></app-link>`,\n})"
+                }
+            ],
+            "test-config.helper.ts": [
+                {
+                    "name": "configureTests",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "test-config.helper.ts",
+                    "type": "",
+                    "defaultValue": "(configure: ConfigureFn, compilerOptions: CompilerOptions = {}) => {\n  const compilerConfig: CompilerOptions = {\n    preserveWhitespaces: false,\n    ...compilerOptions,\n  };\n\n  const configuredTestBed = TestBed.configureCompiler(compilerConfig);\n\n  configure(configuredTestBed);\n\n  return configuredTestBed.compileComponents().then(() => configuredTestBed);\n}"
+                }
+            ],
+            "projects/handy-angular/src/lib/pipes/pretty-print.pipe.ts": [
+                {
+                    "name": "getCircularReplacer",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/handy-angular/src/lib/pipes/pretty-print.pipe.ts",
+                    "type": "",
+                    "defaultValue": "() => {\n  const seen = new WeakSet();\n  return (key: string, value: any) => {\n    if (typeof value === 'object' && value !== null) {\n      if (seen.has(value)) {\n        return;\n      }\n      seen.add(value);\n    }\n    return value;\n  };\n}"
+                }
+            ],
+            "setup-jest.ts": [
+                {
+                    "name": "mock",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "setup-jest.ts",
+                    "type": "",
+                    "defaultValue": "() => {\n  let storage: { [key: string]: string } = {};\n  return {\n    getItem: (key: string) => (key in storage ? storage[key] : null),\n    setItem: (key: string, value: string) => (storage[key] = value || ''),\n    removeItem: (key: string) => delete storage[key],\n    clear: () => (storage = {}),\n  };\n}"
+                }
+            ]
+        },
+        "groupedFunctions": {
+            "projects/handy-angular/src/lib/decorators/change-detecting.decorator.ts": [
+                {
+                    "name": "ChangeDetecting",
+                    "file": "projects/handy-angular/src/lib/decorators/change-detecting.decorator.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "<p>accessor decorator to conditionally trigger change detection on change (for\nuse with getters that are in the template)</p>\n",
+                    "args": [
+                        {
+                            "type": "object"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "type": "object",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "projects/handy-angular/src/lib/utilities/state-service.base.ts": [
+                {
+                    "name": "emitPropertyChange",
+                    "file": "projects/handy-angular/src/lib/utilities/state-service.base.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "property"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "property",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "projects/handy-angular/src/lib/utilities/factory-safe-native-element.ts": [
+                {
+                    "name": "factorySafeHTMLElement",
+                    "file": "projects/handy-angular/src/lib/utilities/factory-safe-native-element.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "el",
+                            "optional": true
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "el",
+                            "optional": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "factorySafeNativeElement",
+                    "file": "projects/handy-angular/src/lib/utilities/factory-safe-native-element.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "elRef",
+                            "optional": true
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "elRef",
+                            "optional": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {
+            "test-config.helper.ts": [
+                {
+                    "name": "CompilerOptions",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "Partial<literal type>",
+                    "file": "test-config.helper.ts",
+                    "description": "",
+                    "kind": 161
+                },
+                {
+                    "name": "ConfigureFn",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "function",
+                    "file": "test-config.helper.ts",
+                    "description": "",
+                    "kind": 162
+                }
+            ]
+        }
+    },
+    "routes": [],
+    "coverage": {
+        "count": 6,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "projects/handy-angular/src/lib/decorators/change-detecting.decorator.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "ChangeDetecting",
+                "coveragePercent": 100,
+                "coverageCount": "1/1",
+                "status": "very-good"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/directives/click-outside.directive.ts",
+                "type": "directive",
+                "linktype": "directive",
+                "name": "ClickOutsideDirective",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/pipes/echo.pipe.ts",
+                "type": "pipe",
+                "linktype": "pipe",
+                "name": "EchoPipe",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/pipes/pretty-print.pipe.ts",
+                "type": "pipe",
+                "linktype": "pipe",
+                "name": "PrettyPrintPipe",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/pipes/pretty-print.pipe.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getCircularReplacer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/pipes/safe.pipe.ts",
+                "type": "pipe",
+                "linktype": "pipe",
+                "name": "SafePipe",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/pipes/stories/safe.component.mock.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "MockSafeComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/pipes/stories/safe.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Base",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/pipes/stories/safe.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/utilities/factory-safe-native-element.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "factorySafeHTMLElement",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/utilities/factory-safe-native-element.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "factorySafeNativeElement",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/utilities/state-service.base.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "StateService",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/utilities/state-service.base.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "emitPropertyChange",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/handy-angular/src/lib/utilities/track-by.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "TrackBy",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "setup-jest.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "mock",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "test-config.helper.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "configureTests",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}

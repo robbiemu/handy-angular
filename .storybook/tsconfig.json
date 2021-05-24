@@ -1,0 +1,19 @@
+{
+  "extends": "../projects/handy-angular/tsconfig.lib.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "types": [
+      "node"
+    ]
+  },
+  "exclude": [
+    "../projects/handy-angular/**/test.ts",
+    "../projects/handy-angular/**/*.spec.ts",
+  ],
+  "include": [
+    "../projects/handy-angular/**/*"
+  ],
+  "typings": [
+    "./typings.d.ts"
+  ]
+}

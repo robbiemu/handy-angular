@@ -1,0 +1,27 @@
+{
+  "singleQuote": true,
+  "arrow-body-style": "off",
+  "prefer-arrow-callback": "off",
+  "printWidth": 84,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "bracketSpacing": true,
+  "trailingComma": "all",
+  "proseWrap": "preserve",
+  "semi": false,
+  "arrowParens": "avoid"
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "parser": "html"
+      }
+    },
+    {
+      "files": "*.component.html",
+      "options": {
+        "parser": "angular"
+      }
+    }
+  ]
+}

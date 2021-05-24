@@ -1,0 +1,79 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier",
+    "../../.eslintrc.json"
+  ],
+  "plugins": ["prettier"],
+  "ignorePatterns": [
+    "!**/*",
+    "**/*.json",
+    "**/*.mock.*",
+    "**/vendor/*.js"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": [
+          "projects/handy-angular/tsconfig.lib.json",
+          "projects/handy-angular/tsconfig.spec.json"
+        ],
+        "createDefaultProgram": true
+      },
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "lib",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "lib",
+            "style": "kebab-case"
+          }
+        ],
+        "@typescript-eslint/indent": [
+          "error",
+          2
+        ],
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/explicit-member-accessibility": 0,
+        "@typescript-eslint/explicit-function-return-type": 0,
+        "@typescript-eslint/no-parameter-properties": 0,
+        "@typescript-eslint/interface-name-prefix": 0,
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-empty-interface": 0,
+        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/semi": [
+          "error",
+          "never",
+          {
+            "beforeStatementContinuationChars": "always"
+          }
+        ],
+        "@typescript-eslint/explicit-module-boundary-types": [
+          "error",
+          {
+            "allowHigherOrderFunctions": true
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "rules": {}
+    }
+  ]
+}
