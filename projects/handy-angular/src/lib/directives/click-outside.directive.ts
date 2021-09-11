@@ -7,6 +7,9 @@ import {
   selector: '[appClickOutside]'
 })
 
+/**
+ * Click outside directive - detect outside clicks
+ */
 export class ClickOutsideDirective {
   constructor(private _elementRef: ElementRef) { }
 
@@ -17,6 +20,5 @@ export class ClickOutsideDirective {
     if (!isClickedInside) {
       this.appClickOutside.emit(null);
     }
-
   }
 }
